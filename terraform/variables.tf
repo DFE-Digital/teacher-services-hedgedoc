@@ -9,7 +9,6 @@ variable "deploy_azure_backing_services" { default = true }
 variable "dns_suffix" {}
 variable "rg_name" {}
 variable "enable_postgres_ssl" { default = true }
-variable "webapp_replicas" { default = 2 }
 
 locals {
   service_name = "hedgedoc"
