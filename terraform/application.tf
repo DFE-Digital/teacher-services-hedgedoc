@@ -35,4 +35,5 @@ module "web_application" {
 
   docker_image           = "quay.io/hedgedoc/hedgedoc:${local.version}"
   web_external_hostnames = [local.main_web_domain]
+  probe_path             = null
 }
