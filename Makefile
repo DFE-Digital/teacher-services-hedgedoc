@@ -3,10 +3,10 @@ ARM_TEMPLATE_TAG=1.1.0
 RG_TAGS={"Product" : "Teacher services cloud"}
 SERVICE_SHORT=hdoc
 
-development:
+development: test-cluster
 	$(eval include global_config/development.sh)
 
-production:
+production: production-cluster
 	$(eval include global_config/production.sh)
 
 install-terrafile: ## Install terrafile to manage terraform modules
@@ -49,3 +49,15 @@ arm-deployment: set-azure-account
 deploy-arm-resources: arm-deployment
 
 validate-arm-resources: set-what-if arm-deployment
+
+test-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189t01-tsc-ts-rg)
+	$(eval CLUSTER_NAME=s189t01-tsc-test-aks)
+
+production-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
+	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
+
+get-cluster-credentials: set-azure-account
+	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
