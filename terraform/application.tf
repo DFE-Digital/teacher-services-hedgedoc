@@ -28,6 +28,8 @@ module "web_application" {
   namespace    = var.namespace
   environment  = var.environment
   service_name = local.service_name
+  run_as_user = "10000"
+  run_as_group = "65534"
 
   cluster_configuration_map  = module.cluster_data.configuration_map
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
