@@ -1,4 +1,3 @@
-TERRAFILE_VERSION=0.8
 ARM_TEMPLATE_TAG=1.1.0
 RG_TAGS={"Product" : "Teacher services cloud"}
 SERVICE_SHORT=hdoc
@@ -9,17 +8,13 @@ development: test-cluster
 production: production-cluster
 	$(eval include global_config/production.sh)
 
-install-terrafile: ## Install terrafile to manage terraform modules
-	[ ! -f bin/terrafile ] \
-		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
-		| tar xz -C ./bin terrafile \
-		|| true
-
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
-terraform-init: install-terrafile set-azure-account
-	./bin/terrafile -p terraform/vendor/modules -f terraform/config/$(CONFIG)_Terrafile
+terraform-init: set-azure-account
+	rm -rf terraform/vendor/modules/aks
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/vendor/modules/aks
+
 	terraform -chdir=terraform init -upgrade -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
