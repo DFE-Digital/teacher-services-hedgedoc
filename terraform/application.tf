@@ -6,6 +6,7 @@ module "application_configuration" {
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
   config_short          = var.config_short
+  run_as_non_root       = var.run_as_non_root
 
   config_variables = {
     CMD_DOMAIN            = local.main_web_domain
@@ -25,11 +26,12 @@ module "web_application" {
 
   is_web = true
 
-  namespace    = var.namespace
-  environment  = var.environment
-  service_name = local.service_name
-  run_as_user = "10000"
-  run_as_group = "65534"
+  namespace       = var.namespace
+  environment     = var.environment
+  service_name    = local.service_name
+  run_as_user     = "10000"
+  run_as_group    = "65534"
+  run_as_non_root = var.run_as_non_root
 
   cluster_configuration_map  = module.cluster_data.configuration_map
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
