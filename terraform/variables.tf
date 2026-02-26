@@ -8,6 +8,7 @@ variable "service_short" {}
 variable "deploy_azure_backing_services" { default = true }
 variable "rg_name" {}
 variable "enable_postgres_ssl" { default = true }
+variable "run_as_non_root" { default = true }
 
 locals {
   service_name = "hedgedoc"
