@@ -6,7 +6,6 @@ module "application_configuration" {
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
   config_short          = var.config_short
-  run_as_non_root       = var.run_as_non_root
 
   config_variables = {
     CMD_DOMAIN            = local.main_web_domain
