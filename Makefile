@@ -26,7 +26,7 @@ terraform-init: set-azure-account
 	$(eval export TF_VAR_rg_name=$(RESOURCE_GROUP_NAME))
 
 terraform-plan: terraform-init
-	terraform -chdir=terraform plan -var-file "config/${CONFIG}.tfvars.json"
+	terraform -chdir=terraform plan ${DETAILED_EXITCODE} -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
 	terraform -chdir=terraform apply -var-file "config/${CONFIG}.tfvars.json"
