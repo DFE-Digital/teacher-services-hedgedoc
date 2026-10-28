@@ -20,6 +20,14 @@ module "application_configuration" {
   }
 }
 
+module "infrastructure_secrets" {
+  source = "./vendor/modules/aks//aks/secrets"
+
+  azure_resource_prefix = var.azure_resource_prefix
+  service_short         = var.service_short
+  config_short          = var.config_short
+}
+
 module "web_application" {
   source = "./vendor/modules/aks//aks/application"
 
@@ -39,4 +47,7 @@ module "web_application" {
   docker_image           = "quay.io/hedgedoc/hedgedoc:${local.version}"
   web_external_hostnames = [local.main_web_domain]
   probe_path             = null
+
+  enable_basicauth = true
+  basicauth_secret = module.infrastructure_secrets.map.BASIC-AUTH
 }
